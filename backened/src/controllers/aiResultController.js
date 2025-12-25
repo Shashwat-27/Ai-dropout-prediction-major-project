@@ -1,6 +1,7 @@
 import prisma from "../config/prisma.js";
 import axios from "axios";
 
+const ML_SERVICE_URL = process.env.ML_SERVICE_URL;
 export const analyzeStudent = async (req, res) => {
   try {
     const { admission_id } = req.params;
@@ -28,7 +29,7 @@ export const analyzeStudent = async (req, res) => {
 
     // 3️⃣ Call NLP ML service (sentiment + emotion)
     const textML = await axios.post(
-      "http://127.0.0.1:8000/analyze-text",
+      `${ML_SERVICE_URL}/analyze-text`,
       { text: combinedText }
     );
 
@@ -49,7 +50,7 @@ export const analyzeStudent = async (req, res) => {
 
     if (video?.video_url) {
       const videoML = await axios.post(
-        "http://127.0.0.1:8000/analyze-video",
+        `${ML_SERVICE_URL}/analyze-video`,
         { video_url: video.video_url }
       );
 
