@@ -1,0 +1,13 @@
+first 
+npm init -y
+
+npm install express cors dotenv @prisma/client
+
+npm install prisma --save-dev 
+
+npx prisma init
+
+delete prisma config ts
+
+add db url in env and config with schema in prisma
+

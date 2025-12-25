@@ -1,0 +1,165 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+//
+// 🧠 MAIN TABLE — Student
+//
+model Student {
+  admission_id       String   @id
+  name               String
+  dob                DateTime?
+  gender             String?
+  address            String?
+  email              String
+  phone              String?
+  emergency          String?
+  department         String
+  year               Int
+  course             String?
+  gpa                Float?
+  attendance         Int?
+  enrollmentDate     DateTime?
+  notes              String?
+  extracurricular    String?
+  disciplinary       String?
+  risk               String?
+  created_at         DateTime @default(now())
+  last               DateTime @default(now())
+
+  // Relations (all one-to-one)
+  mentor_insight     MentorInsight?
+  StudentAnalysis          StudentAnalysis?
+  psychologist_review PsychologistReview?
+  short_response     StudentShortResponse?
+  text_answer        StudentTextAnswer?
+  video_response     StudentVideoResponse?
+}
+
+//
+// 🧩 Mentor Insight — One-to-One
+//
+model MentorInsight {
+  id                     Int      @id @default(autoincrement())
+  admission_id           String   @unique
+  mentor_review_notes     String?
+  mentor_recommendation_action          String?
+  mentor_custom_action_plan  String?
+  reviewed_by_mentor     Boolean  @default(false)
+  last_updated           DateTime @default(now())
+
+  student                Student  @relation(fields: [admission_id], references: [admission_id], onDelete: Restrict)
+}
+
+
+
+model StudentAnalysis {
+  id               Int      @id @default(autoincrement())
+  admission_id     String   @unique
+  sentiment        String?
+  emotion          String?
+  video_emotion    String?
+  risk_level       String?
+  learning_phase   String?
+  confidence_score Float?
+  explanation      String?
+  created_at       DateTime @default(now())
+
+  student Student @relation(fields: [admission_id], references: [admission_id])
+}
+
+
+
+//
+// 🧠 Psychologist Review — One-to-One
+//
+model PsychologistReview {
+  review_id                     Int      @id @default(autoincrement())
+  admission_id                  String   @unique
+  stability                     String?
+  anxiety_level                 String?
+  coping_mechanisms             String?
+  academic_impact               String?
+  observation                   String?
+  psychologist_recommendation_action String?
+  psychologist_name              String?
+  reviewed_by_psychologist     Boolean  @default(false)
+  review_date                   DateTime @default(now())
+
+  student                        Student  @relation(fields: [admission_id], references: [admission_id], onDelete: Restrict)
+}
+
+//
+// 🧩 Student Short Response — One-to-One
+//
+model StudentShortResponse {
+  admission_id          String   @id
+  instagram_id          String?
+  snapchat_id           String?
+  study_source          String?
+  time_preference       String?
+  personality_word      String?
+  friend_circle         String?
+  has_best_friend       String?
+  problem_sharing       String?
+  support_seeking       String?
+  group_vibe            String?
+  favorite_social_app   String?
+  drink_preference      String?
+  today_mood            String?
+  created_at            DateTime @default(now())
+
+  student               Student  @relation(fields: [admission_id], references: [admission_id], onDelete: Restrict)
+}
+
+//
+// ✍️ Student Text Answer — One-to-One
+//
+model StudentTextAnswer {
+  admission_id   String  @id
+  question1      String?
+  question2      String?
+  question3      String?
+  question4      String?
+  question5      String?
+  question6      String?
+  question7      String?
+  question8      String?
+  ai_sentiment   Json?
+  created_at     DateTime @default(now())
+
+  student        Student  @relation(fields: [admission_id], references: [admission_id], onDelete: Restrict)
+}
+
+//
+// 🎥 Student Video Response — One-to-One
+//
+model StudentVideoResponse {
+  admission_id   String  @id
+  video_url      String
+  video_duration Int?
+  ai_emotion     Json?
+  created_at     DateTime @default(now())
+
+  student        Student  @relation(fields: [admission_id], references: [admission_id], onDelete: Restrict)
+}
+
+
+
+model Mentor {
+  id        Int    @id @default(autoincrement())
+  mentor_id String @unique
+  password  String
+}
+
+
+model Psychologist {
+  id       Int    @id @default(autoincrement())
+  psych_id String @unique
+  password String
+}
