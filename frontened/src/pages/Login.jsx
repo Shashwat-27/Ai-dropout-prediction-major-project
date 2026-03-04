@@ -86,6 +86,28 @@ function Login() {
     }
   };
 
+  const fillDemoCredentials = () => {
+  if (role === "Student") {
+    setUserId("2023b1541048");
+    setPasswordOrDob("2005-12-27");
+  }
+
+  if (role === "Mentor") {
+    setUserId("Shashwat");
+    setPasswordOrDob("12345678");
+  }
+
+  if (role === "Psychologist") {
+    setUserId("Shashwat");
+    setPasswordOrDob("12345678");
+  }
+
+  if (role === "College") {
+    setUserId("college_admin");
+    setPasswordOrDob("college@123");
+  }
+};
+
   return (
     <div className="centered">
       <form className="card form" onSubmit={handleSubmit}>
@@ -126,6 +148,13 @@ function Login() {
         <button className="btn" type="submit">
           Login
         </button>
+        <button
+  type="button"
+  className="btn"
+  onClick={fillDemoCredentials}
+>
+  Use Demo Credentials
+</button>
       </form>
     </div>
   );
