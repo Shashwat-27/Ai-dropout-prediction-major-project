@@ -21,7 +21,7 @@ function Login() {
 
       /* ================= STUDENT ================= */
       if (role === "Student") {
-        res = await axios.post(`${API_URL}/student-login`, {
+        res = await axios.post(`${API_URL}/api/auth/student-login`, {
           admission_id: userId,
           dob: passwordOrDob,
         });
@@ -36,7 +36,7 @@ function Login() {
 
       /* ================= MENTOR ================= */
       if (role === "Mentor") {
-        res = await axios.post(`${API_URL}/mentor-login`, {
+        res = await axios.post(`${API_URL}/api/auth/mentor-login`, {
           mentor_id: userId,
           password: passwordOrDob,
         });
@@ -51,7 +51,7 @@ function Login() {
 
       /* ================= PSYCHOLOGIST ================= */
       if (role === "Psychologist") {
-        res = await axios.post(`${API_URL}/psychologist-login`, {
+        res = await axios.post(`${API_URL}/api/auth/psychologist-login`, {
           psych_id: userId,
           password: passwordOrDob,
         });
@@ -66,7 +66,7 @@ function Login() {
 
       /* ================= COLLEGE / ADMIN ================= */
       if (role === "College") {
-        res = await axios.post(`${API_URL}/admin-login`, {
+        res = await axios.post(`${API_URL}/api/auth/admin-login`, {
           username: userId,
           password: passwordOrDob,
         });
