@@ -100,7 +100,7 @@ function StudentDetailModal({ show, onHide, student, onSave }) {
   const analyzeStudent = async (admissionId) => {
   try {
     const res = await axios.post(
-      `http://localhost:5000/api/ai-results/analyze/${admissionId}`
+      `${API_URL}/api/ai-results/analyze/${admissionId}`
     );
 
     console.log("AI ANALYSIS RESULT:", res.data);
