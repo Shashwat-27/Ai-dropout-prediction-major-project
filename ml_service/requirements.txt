@@ -7,4 +7,5 @@ tf-keras
 opencv-python-headless
 deepface
 requests
+numpy
 python-multipart

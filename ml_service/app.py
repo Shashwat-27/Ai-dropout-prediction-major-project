@@ -9,22 +9,34 @@ import numpy as np
 
 app = FastAPI()
 
-sentiment_model = pipeline(
-    "sentiment-analysis",
-    model="distilbert-base-uncased-finetuned-sst-2-english"
-)
+# Lazy loading models (important for deployment)
+sentiment_model = None
+emotion_model = None
 
-emotion_model = pipeline(
-    "text-classification",
-    model="j-hartmann/emotion-english-distilroberta-base",
-    top_k=1
-)
+def load_models():
+    global sentiment_model, emotion_model
+    if sentiment_model is None:
+        sentiment_model = pipeline(
+            "sentiment-analysis",
+            model="distilbert-base-uncased-finetuned-sst-2-english"
+        )
+
+    if emotion_model is None:
+        emotion_model = pipeline(
+            "text-classification",
+            model="j-hartmann/emotion-english-distilroberta-base",
+            top_k=1
+        )
+
 
 class TextInput(BaseModel):
     text: str
 
+
 @app.post("/analyze-text")
 def analyze_text(data: TextInput):
+    load_models()
+
     sentiment = sentiment_model(data.text)[0]
     emotion = emotion_model(data.text)[0][0]
 
@@ -36,15 +48,15 @@ def analyze_text(data: TextInput):
     }
 
 
-# ---------- VIDEO / FACE ANALYSIS ----------
 class VideoInput(BaseModel):
     video_url: str
+
 
 @app.post("/analyze-video")
 def analyze_video(data: VideoInput):
     try:
-        # download video temporarily
         video_bytes = requests.get(data.video_url).content
+
         with tempfile.NamedTemporaryFile(suffix=".mp4") as tmp:
             tmp.write(video_bytes)
             tmp.flush()
@@ -72,4 +84,3 @@ def analyze_video(data: VideoInput):
 
     except Exception as e:
         return {"error": str(e)}
-# To run the app: uvicorn aiprediction.ml_service.app:app --reload
